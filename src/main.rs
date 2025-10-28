@@ -2,15 +2,14 @@ use std::io;
 
 fn main() {
     let mut sum = 0;
+    let mut has_invalid_data = false;
 
     loop {
         let mut input = String::new();
-        match io::stdin().read_line(&mut input) {
-            Ok(_) => {}
-            Err(_) => {
-                println!("NaN");
-                return;
-            }
+
+        if io::stdin().read_line(&mut input).is_err() {
+            has_invalid_data = true;
+            break;
         }
 
         let input = input.trim();
@@ -24,16 +23,18 @@ fn main() {
                 if num > 0 {
                     sum += num;
                 } else {
-                    println!("NaN");
-                    return;
+                    has_invalid_data = true;
                 }
             }
             Err(_) => {
-                println!("NaN");
-                return;
+                has_invalid_data = true;
             }
         }
     }
 
-    println!("{}", sum);
+    if has_invalid_data {
+        println!("NaN");
+    } else {
+        println!("{}", sum);
+    }
 }
