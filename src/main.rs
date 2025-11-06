@@ -2,39 +2,27 @@ use std::io;
 
 fn main() {
     let mut sum = 0;
-    let mut has_invalid_data = false;
-
     loop {
         let mut input = String::new();
+        let _ = io::stdin().read_line(&mut input);
 
-        if io::stdin().read_line(&mut input).is_err() {
-            has_invalid_data = true;
-            break;
-        }
-
-        let input = input.trim();
-
-        if input == "-1" {
-            break;
-        }
-
-        match input.parse::<i32>() {
-            Ok(num) => {
-                if num > 0 {
-                    sum += num;
-                } else {
-                    has_invalid_data = true;
+        let n: Result<i32, _> = input.trim().parse();
+        match n {
+            Ok(n) => {
+                if n == -1 {
+                    break;
                 }
+                if n < 0 {
+                    println!("NaN");
+                    return;
+                }
+                sum += n;
             }
             Err(_) => {
-                has_invalid_data = true;
+                println!("NaN");
+                return;
             }
         }
     }
-
-    if has_invalid_data {
-        println!("NaN");
-    } else {
-        println!("{}", sum);
-    }
+    println!("{sum}");
 }
